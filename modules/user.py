@@ -12,7 +12,7 @@ class User(commands.Cog):
 
     @commands.slash_command(guild_ids=[guild], description='displays your balance')
     async def balance(self, inter: disnake.ApplicationCommandInteraction):
-        cursor.execute(f"SELECT balance FROM main WHERE discord_nick = {inter.user.name}")
+        cursor.execute(f"SELECT balance FROM main WHERE discord = {inter.user.id}")
         result = cursor.fetchone()
         if not result is None:
             await inter.response.send_message(f'Your balance - {result[0]}', ephemeral=True)
@@ -22,16 +22,17 @@ class User(commands.Cog):
     @commands.slash_command(guild_ids=[guild], description='pay a user')
     async def pay(self, discord_nick: str, money: int ,inter: disnake.ApplicationCommandInteraction):
         try:
-            cursor.execute(f"SELECT balance FROM main WHERE discord_nick = {inter.user.name}")
+            cursor.execute(f"SELECT balance FROM main WHERE discord = {inter.user.id}")
             result1 = cursor.fetchone()
             aye = result1[0] - money
             if aye != 0:
-                cursor.execute(f"SELECT balance FROM main WHERE discord_nick = {discord_nick}")
+                discord_nick = discord_nick.replace("<", "").replace("@", "").replace(">", "")
+                cursor.execute(f"SELECT balance FROM main WHERE discord = {discord_nick}")
                 result = cursor.fetchone()
-                cursor.execute(f"UPDATE main SET balance='{aye}' WHERE discord_nick={inter.user.name}")
+                cursor.execute(f"UPDATE main SET balance='{aye}' WHERE discord={inter.user.id}")
                 connection.commit()
                 all = money + result[0]
-                cursor.execute(f"UPDATE main SET balance='{all}' WHERE discord_nick={discord_nick}")
+                cursor.execute(f"UPDATE main SET balance='{all}' WHERE discord={discord_nick}")
                 connection.commit()
                 await inter.response.send_message(f'you paid the player - <@{discord_nick}>', ephemeral=True)
             else:

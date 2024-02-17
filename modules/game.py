@@ -12,19 +12,19 @@ class Game(commands.Cog):
 
     @commands.slash_command(guild_ids=[guild], description='Choose - heads/tails')
     async def coinflip (self, choose: str,money: int, inter: disnake.ApplicationCommandInteraction):
-        cursor.execute(f"SELECT balance FROM main WHERE discord_nick = {inter.user.name}")
+        cursor.execute(f"SELECT balance FROM main WHERE discord={inter.user.id}")
         result = cursor.fetchone()
         if not result is None:
             coin = ['heads','tails']
             list = random.choice(coin)
             if choose == list:
-                win = (money*1.8) + result
-                cursor.execute(f"UPDATE main SET balance='{win}' WHERE discord_nick={inter.user.name}")
+                win = (money*2) + result
+                cursor.execute(f"UPDATE main SET balance='{win}' WHERE discord={inter.user.id}")
                 connection.commit()
-                await inter.response.send_message(f"You win ! - {money*1.8}", ephemeral=True)
+                await inter.response.send_message(f"You win ! - {money*2}", ephemeral=True)
             else:
                 loose = result - money
-                cursor.execute(f"UPDATE main SET balance='{loose}' WHERE discord_nick={inter.user.name}")
+                cursor.execute(f"UPDATE main SET balance='{loose}' WHERE discord={inter.user.id}")
                 connection.commit()
                 await inter.response.send_message(f"You loose ;c !", ephemeral=True)
 

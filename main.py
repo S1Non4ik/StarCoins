@@ -37,25 +37,41 @@ async def on_ready():
                 await reload_cogg(filename[:-3])
 
 
-
 @bot.slash_command(guild_ids=[guild], description='Restart moduel')
-@commands.has_permissions(administrator=True)
 async def restart(inter, name: str):
-    bot.unload_extension(f"modules.{name}")
-    bot.load_extension(f"modules.{name}")
-    await inter.response.send_message(f"Moudel - {name} was restared", ephemeral=True)
+    if disnake.utils.get(inter.user.roles, id=ModAdmin):
+        bot.unload_extension(f"modules.{name}")
+        bot.load_extension(f"modules.{name}")
+        await inter.response.send_message(f"Moudel - {name} was restared", ephemeral=True)
+    else:
+        emb = disnake.Embed(title='📛 Error 📛',
+                            description='```You dont have enough rights```',
+                            color=disnake.Color.blurple())
+        await inter.response.send_message(embed=emb)
+
 
 @bot.slash_command(guild_ids=[guild], description='Restart moduel')
-@commands.has_permissions(administrator=True)
 async def stop(inter, name: str):
-    bot.unload_extension(f"modules.{name}")
-    await inter.response.send_message(f"Moudel - {name} was disabled", ephemeral=True)
+    if disnake.utils.get(inter.user.roles, id=ModAdmin):
+        bot.unload_extension(f"modules.{name}")
+        await inter.response.send_message(f"Moudel - {name} was disabled", ephemeral=True)
+    else:
+        emb = disnake.Embed(title='📛 Error 📛',
+                            description='```You dont have enough rights```',
+                            color=disnake.Color.blurple())
+        await inter.response.send_message(embed=emb)
+
 
 @bot.slash_command(guild_ids=[guild], description='Restart moduel')
-@commands.has_permissions(administrator=True)
 async def run(inter, name: str):
-    bot.load_extension(f"modules.{name}")
-    await inter.response.send_message(f"Moudel - {name} has been launched", ephemeral=True)
+    if disnake.utils.get(inter.user.roles, id=ModAdmin):
+        bot.load_extension(f"modules.{name}")
+        await inter.response.send_message(f"Moudel - {name} has been launched", ephemeral=True)
+    else:
+        emb = disnake.Embed(title='📛 Error 📛',
+                            description='```You dont have enough rights```',
+                            color=disnake.Color.blurple())
+        await inter.response.send_message(embed=emb)
 
 
 

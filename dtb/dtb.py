@@ -15,6 +15,3 @@ try:
 except (Exception, Error) as error:
     raise TypeError("Error while connecting to PostgreSQL", error)
 
-
-
-

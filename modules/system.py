@@ -12,7 +12,7 @@ class System(commands.Cog):
         self.bot = bot
         print('Main Modules - System is Load')
 
-    @commands.slash_command(guild_ids=[guild])
+    @commands.slash_command(guild_ids=[guild], description='Display information about load and operation')
     @commands.has_permissions(administrator=True)
     async def system(self, inter: disnake.ApplicationCommandInteraction):
         emb = disnake.Embed(title="** Server load **  ",

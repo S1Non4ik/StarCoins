@@ -11,20 +11,15 @@ class OnUser(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel = self.bot.get_channel(NewUserChannel)
-        await channel.send(f'Hellow <@{member.id}>')
         try:
-            cursor.execute(f"SELECT discord_id FROM main WHERE discord_id = {member.id}")
+            cursor.execute(f"SELECT discord FROM main WHERE discord = '{member.id}'")
             if not cursor.fetchone() is None:
-                cursor.execute(f"UPDATE main SET discord_nick='{member.name}' WHERE discord_id={member.id}")
-                connection.commit()
                 pass
             else:
-                values = (f"INSERT INTO main (discord_id, balance,discord_nick ) VALUES(%s, %s, %s)")
-                insert = (f'{member.id}', f'{0}', f'{member.name}')
+                values = (f"INSERT INTO main (balance,discord_nick ) VALUES(%s, %s)")
+                insert = (f'{0}', f'{member.id}')
                 cursor.execute(values, insert)
                 connection.commit()
-                print('ne v bd')
         except Exception as ext:
             print(ext)
 
