@@ -8,8 +8,6 @@ try:
                                   port="5432",
                                   database="postgres")
     cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cursor.execute("SELECT * FROM main")
-    record = cursor.fetchone()
     print("You are connected to base")
 
 except (Exception, Error) as error:

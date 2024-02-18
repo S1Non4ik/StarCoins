@@ -50,7 +50,7 @@ async def restart(inter, name: str):
         await inter.response.send_message(embed=emb)
 
 
-@bot.slash_command(guild_ids=[guild], description='Restart moduel')
+@bot.slash_command(guild_ids=[guild], description='Stop moduel')
 async def stop(inter, name: str):
     if disnake.utils.get(inter.user.roles, id=ModAdmin):
         bot.unload_extension(f"modules.{name}")
@@ -62,7 +62,7 @@ async def stop(inter, name: str):
         await inter.response.send_message(embed=emb)
 
 
-@bot.slash_command(guild_ids=[guild], description='Restart moduel')
+@bot.slash_command(guild_ids=[guild], description='Run moduel')
 async def run(inter, name: str):
     if disnake.utils.get(inter.user.roles, id=ModAdmin):
         bot.load_extension(f"modules.{name}")

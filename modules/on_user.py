@@ -3,6 +3,7 @@ from cfg.cfg import guild
 from disnake.ext import commands
 from cfg.cfg import *
 from dtb.dtb import *
+from datetime import date, timedelta
 
 class OnUser(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -16,9 +17,13 @@ class OnUser(commands.Cog):
             if not cursor.fetchone() is None:
                 pass
             else:
-                values = (f"INSERT INTO main (balance,discord_nick ) VALUES(%s, %s)")
-                insert = (f'{0}', f'{member.id}')
-                cursor.execute(values, insert)
+                first = (f"INSERT INTO main (balance,discord ) VALUES(%s, %s)")
+                FirstInsert = (f'{0}', f'{member.id}')
+                cursor.execute(first, FirstInsert)
+                connection.commit()
+                second = (f"INSERT INTO coin (discord,date) VALUES(%s,%s)")
+                SecondInsert = (f'{member.id}', f'{date.today()}')
+                cursor.execute(second, SecondInsert)
                 connection.commit()
         except Exception as ext:
             print(ext)
