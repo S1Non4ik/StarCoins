@@ -81,7 +81,7 @@ class Staff(commands.Cog):
                 aye = result[0] - money
                 cursor.execute(f"UPDATE main SET balance='{aye}' WHERE discord='{user}'")
                 connection.commit()
-                await inter.response.send_message(f"you took {aye} starcoins from <@{user}>", ephemeral=True)
+                await inter.response.send_message(f"you took {money} starcoins from <@{user}>", ephemeral=True)
                 await channel.send(f"<@{inter.user.id}> took {aye} starcoins from <@{user}>")
             except Exception as ext:
                 print(ext)
