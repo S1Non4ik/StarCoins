@@ -18,9 +18,10 @@ class Staff(commands.Cog):
                 user = user.replace("<", "").replace("@", "").replace(">", "")
                 cursor.execute(f"UPDATE main SET balance='{money}' WHERE discord='{user}'")
                 connection.commit()
-                await inter.response.send_message(f'you have set the balance - {money}, '
-                                                  f'for the user - <@{user}>',
-                                                  ephemeral=True)
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'Нou have set the balance - <@{user}> | User balance now- {money}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, phemeral=True)
                 await channel.send(f'<@{inter.user.id}> have set the balance - {money}, '
                                    f'for the user - <@{user}>')
             except Exception as ext:
@@ -39,7 +40,10 @@ class Staff(commands.Cog):
                 user = user.replace("<", "").replace("@", "").replace(">", "")
                 cursor.execute(f"SELECT balance FROM main WHERE discord = {user}")
                 result = cursor.fetchone()
-                await inter.response.send_message(f"Balance of user - {result}", ephemeral=True)
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'Balance of <@{user}> - {result}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, ephemeral=True)
                 await channel.send(f'<@{inter.user.id}> check balance - {result}, for the user - <@{user}>')
             except Exception as ext:
                 print(ext)
@@ -50,7 +54,7 @@ class Staff(commands.Cog):
             await inter.response.send_message(embed=emb)
 
     @commands.slash_command(guild_ids=[guild], description='gives a user starcoins')
-    async def spay(self, money: int, user:str , inter: disnake.ApplicationCommandInteraction):
+    async def spay(self, money: int, user: str, inter: disnake.ApplicationCommandInteraction):
         if disnake.utils.get(inter.user.roles, id=ModRole):
             channel = self.bot.get_channel(LogsChannel)
             try:
@@ -60,8 +64,11 @@ class Staff(commands.Cog):
                 aye = money + result[0]
                 cursor.execute(f"UPDATE main SET balance = '{aye}' WHERE discord='{user}' ")
                 connection.commit()
-                await inter.response.send_message(f"Balance of user - {aye}", ephemeral=True)
-                await channel.send(f'<@{inter.user.id}> check balance - {result}, for the user - <@{user}>')
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'You added money - <@{user}> | User balance now- {aye}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, ephemeral=True)
+                await channel.send(f'<@{inter.user.id}> added money- {result}, for the user - <@{user}>')
             except Exception as ext:
                 print(ext)
         else:
@@ -81,8 +88,11 @@ class Staff(commands.Cog):
                 aye = result[0] - money
                 cursor.execute(f"UPDATE main SET balance='{aye}' WHERE discord='{user}'")
                 connection.commit()
-                await inter.response.send_message(f"you took {money} starcoins from <@{user}>", ephemeral=True)
-                await channel.send(f"<@{inter.user.id}> took {aye} starcoins from <@{user}>")
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'You took money - <@{user}> | User balance now- {aye}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, ephemeral=True)
+                await channel.send(f"<@{inter.user.id}> took {money} starcoins from <@{user}>")
             except Exception as ext:
                 print(ext)
         else:

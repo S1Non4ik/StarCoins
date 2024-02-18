@@ -15,12 +15,18 @@ class User(commands.Cog):
         cursor.execute(f"SELECT balance FROM main WHERE discord = {inter.user.id}")
         result = cursor.fetchone()
         if not result is None:
-            await inter.response.send_message(f'Your balance - {result[0]}', ephemeral=True)
+            emb = disnake.Embed(title='**Starcoins Bot**',
+                                description=f'Your balance - {result[0]}✮',
+                                colour=disnake.Colour.gold())
+            await inter.response.send_message(embed=emb, ephemeral=True)
         else:
-            await inter.response.send_message('Error', ephemeral=True)
+            emb = disnake.Embed(title='📛 Error 📛',
+                                description='```Something went wrong```',
+                                color=disnake.Color.blurple())
+            await inter.response.send_message(embed=emb, ephemeral=True)
 
     @commands.slash_command(guild_ids=[guild], description='pay a user')
-    async def pay(self, discord_nick: str, money: int ,inter: disnake.ApplicationCommandInteraction):
+    async def pay(self, discord_nick: str, money: int,inter: disnake.ApplicationCommandInteraction):
         try:
             cursor.execute(f"SELECT balance FROM main WHERE discord = {inter.user.id}")
             result1 = cursor.fetchone()
@@ -34,9 +40,15 @@ class User(commands.Cog):
                 all = money + result[0]
                 cursor.execute(f"UPDATE main SET balance='{all}' WHERE discord={discord_nick}")
                 connection.commit()
-                await inter.response.send_message(f'you paid the player - <@{discord_nick}>', ephemeral=True)
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'You paid the player - <@{discord_nick}> | Your balance now- {all}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, ephemeral=True)
             else:
-                await inter.response.send_message(f'you dont have enough money', ephemeral=True)
+                emb = disnake.Embed(title='**Starcoins Bot**',
+                                    description=f'You dont have enough money | Your balance now- {result1[0]}✮',
+                                    colour=disnake.Colour.gold())
+                await inter.response.send_message(embed=emb, ephemeral=True)
         except Exception as ext:
             print(ext)
 

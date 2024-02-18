@@ -24,6 +24,9 @@ class OnUser(commands.Cog):
                 second = (f"INSERT INTO coin (discord,date) VALUES(%s,%s)")
                 SecondInsert = (f'{member.id}', f'{date.today()}')
                 cursor.execute(second, SecondInsert)
+                free = (f"INSERT INTO pickaxe (pickaxe,discord) VALUES(%s, %s)")
+                FreeInser = (f'false', f'{member.id}')
+                cursor.execute(free, FreeInser)
                 connection.commit()
         except Exception as ext:
             print(ext)
